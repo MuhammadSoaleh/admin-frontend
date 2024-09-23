@@ -70,6 +70,7 @@
                         </div>
                     </div>
                     <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
+                    <a href="datatable.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>datatable</a>
                     <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
                     <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
                     <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
@@ -239,19 +240,41 @@
 <table id="myTable" class="display container-fluid">
     <thead>
         <tr>
-            <th>Column 1</th>
-            <th>Column 2</th>
+            <th>Customer Name</th>
+            <th>Items</th>
+            <th>quantity</th>
+            <th>order status</th>
+            <th>edit</th>
+            <th>delete</th>
             
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>Row 1 Data 1</td>
-            <td>Row 1 Data 2</td>
+            <td>abc</td>
+            <td>shirt and jeans</td>
+            <td>2</td>
+            <td><select id="cars" name="cars" class="rounded-pill bg-primary" >
+                <option value="recieve">recieve</option>
+                <option value="pending">pending</option>
+                <option value="delivered">delivered</option>
+                <!-- <option value="audi">Audi</option> -->
+              </select></td>
+            <td><i class="fas fa-edit" style="color: #009cff;"></i></td>
+            <td><i class="fa-solid fa-trash" style="color:rgb(201, 33, 33) ;"></i></td>
         </tr>
         <tr>
-            <td>Row 2 Data 1</td>
-            <td>Row 2 Data 2</td>
+            <td>abc</td>
+            <td>shirt and jeans</td>
+            <td>2</td>
+            <td><select id="cars" name="cars" class="rounded-pill bg-primary" >
+                <option value="recieve">recieve</option>
+                <option value="pending">pending</option>
+                <option value="delivered">delivered</option>
+                <!-- <option value="audi">Audi</option> -->
+              </select></td>
+            <td><i class="fas fa-edit" style="color: #009cff;"></i></td>
+            <td><i class="fa-solid fa-trash" style="color:rgb(201, 33, 33) ;"></i></td>
         </tr>
     </tbody>
 </table>
