@@ -1,3 +1,42 @@
+<?php
+session_start();
+if (isset($_POST['sub'])) {
+    include('conn.php');
+    
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $name = $_POST['name'];
+
+    // Password hashing
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    
+    // Insert query with correct string concatenation
+    $sql = "INSERT INTO `register` (`r-name`, `r-email`, `r-pass`) VALUES ('$name', '$email', '$hashed_password')";
+    
+    $result = mysqli_query($conn, $sql);
+    if ($result && mysqli_affected_rows($conn) > 0) {
+        $_SESSION['email'] = $email;
+        $_SESSION['password'] = $password;
+        header("Location: signin.php");
+        exit();
+    } else {
+        echo "<script>alert('Error: Could not insert the record.')</script>";
+    }
+
+    // Email validation
+    if (empty($email)) {
+        $errors[] = "Email is required";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Invalid email format";
+    }
+}
+?>
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,7 +81,7 @@
         <!-- Spinner End -->
 
 
-        <!-- Sign In Start -->
+        <!-- Sign Up Start -->
         <div class="container-fluid">
             <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
                 <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
@@ -51,30 +90,36 @@
                             <a href="index.html" class="">
                                 <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>DASHMIN</h3>
                             </a>
-                            <h3>Sign In</h3>
+                            <h3>Sign Up</h3>
+                        </div>
+                        <form method="post">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="name" id="floatingText" placeholder="jhondoe">
+                            <label for="floatingText">Username</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                            <input type="email" class="form-control" name="email" id="floatingInput" placeholder="name@example.com">
                             <label for="floatingInput">Email address</label>
                         </div>
                         <div class="form-floating mb-4">
-                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                            <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password">
                             <label for="floatingPassword">Password</label>
                         </div>
-                        <div class="d-flex align-items-center justify-content-between mb-4">
+                        <!-- <div class="d-flex align-items-center justify-content-between mb-4">
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
                                 <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                            </div>
+                            </div> -->
                             <a href="">Forgot Password</a>
                         </div>
-                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign In</button>
-                        <p class="text-center mb-0">Don't have an Account? <a href="">Sign Up</a></p>
+                        <button type="submit" name="sub" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
+                        </form>
+                        <p class="text-center mb-0">Already have an Account? <a href="/signin.php">Sign In</a></p>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Sign In End -->
+        <!-- Sign Up End -->
     </div>
 
     <!-- JavaScript Libraries -->
