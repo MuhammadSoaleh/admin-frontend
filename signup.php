@@ -114,7 +114,7 @@ if (isset($_POST['sub'])) {
                         </div>
                         <button type="submit" name="sub" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
                         </form>
-                        <p class="text-center mb-0">Already have an Account? <a href="/signin.php">Sign In</a></p>
+                        <p class="text-center mb-0">Already have an Account? <a href="./signin.php">Sign In</a></p>
                     </div>
                 </div>
             </div>
