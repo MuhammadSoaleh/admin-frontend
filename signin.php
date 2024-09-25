@@ -1,46 +1,43 @@
 <?php
 session_start();
-if(isset($_POST['sub'])){
+
+if (isset($_POST['sub'])) {
     include('conn.php');
-    // $fname=$_POST['fname'];
-    // $lname=$_POST['lname'];
-    $email=$_POST['email'];
-    $password=$_POST['password'];
-    $sql="SELECT * FROM `registration` WHERE  `r_email`='$email' AND `r_password`='$password'";
     
-    $result=mysqli_query($conn,$sql);
-    $row=mysqli_num_rows($result);
-    if($row){
-        $_SESSION['email']=$email;
-        $_SESSION['password']=$password;
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    
+    // Validate email format before querying the database
+    if (empty($email)) {
+        echo "<script>alert('Email is required');</script>";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "<script>alert('Invalid email format');</script>";
+    } else {
+        // Prepare and execute SQL query to fetch user based on email
+        $sql = "SELECT * FROM `register` WHERE `r-email` = '$email'";
+        $result = mysqli_query($conn, $sql);
 
-        header("location:index.php");
+        // Check if a user with the email exists
+        if (mysqli_num_rows($result) > 0) {
+            $user = mysqli_fetch_assoc($result);  // Fetch user data as an associative array
+            $hashed_password = $user['r-pass'];   // Get the stored hashed password
+            
+            // Verify the entered password with the stored hashed password
+            if (password_verify($password, $hashed_password)) {
+                // Password is valid, set session variables
+                $_SESSION['email'] = $email;
+                header("Location: index.html");
+                exit();
+            } else {
+                echo "<script>alert('Invalid password');</script>";
+            }
+        } else {
+            echo "<script>alert('No account found with this email');</script>";
+        }
     }
-    else{
-        echo "<script> alert('invalid email password error') </script>";
-    }
-
-
-// Validate email
-if (empty($email)) {
-  $errors[] = "Email is required";
-} elseif (!filter_var($row, FILTER_VALIDATE_EMAIL)) {
-  $errors[] = "Invalid email format";
-}
-
-
-if (password_verify($password, $hashed_password)) {
-  echo 'The password is valid.';
-} else {
-  echo 'The password is invalid.';
-}
-
-
-
-
-
 }
 ?>
+
 
 
 <!DOCTYPE html>
@@ -98,23 +95,24 @@ if (password_verify($password, $hashed_password)) {
                             </a>
                             <h3>Sign In</h3>
                         </div>
+                        <form action="" method="post">
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                            <input type="email" class="form-control" name="email" id="floatingInput" placeholder="name@example.com">
                             <label for="floatingInput">Email address</label>
                         </div>
                         <div class="form-floating mb-4">
-                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                            <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password">
                             <label for="floatingPassword">Password</label>
                         </div>
                         <div class="d-flex align-items-center justify-content-between mb-4">
-                            <div class="form-check">
+                            <!-- <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
                                 <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                            </div>
-                            <a href="">Forgot Password</a>
+                            </div> -->
+                            <!-- <a href="">Forgot Password</a> -->
                         </div>
-                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign In</button>
-                        <p class="text-center mb-0">Don't have an Account? <a href="">Sign Up</a></p>
+                        <button type="submit" name="sub" class="btn btn-primary py-3 w-100 mb-4">Sign In</button></form>
+                        <p class="text-center mb-0">Don't have an Account? <a href="/signup.php">Sign Up</a></p>
                     </div>
                 </div>
             </div>
