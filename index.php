@@ -1,3 +1,16 @@
+<?php
+session_start();
+
+// Check if the user is logged in by verifying if a session variable is set.
+// You can check for a specific session variable that you set when the user logs in, like 'user_id'.
+if (!isset($_SESSION['user_id'])) {
+    // If 'user_id' is not set, the user is not logged in. Redirect to signin page.
+    header('Location: signin.php');
+    exit(); // Ensure no further code is executed after the redirect.
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -175,7 +188,7 @@
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">My Profile</a>
                             <a href="#" class="dropdown-item">Settings</a>
-                            <a href="#" class="dropdown-item">Log Out</a>
+                            <a href="/logout.php" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
                 </div>

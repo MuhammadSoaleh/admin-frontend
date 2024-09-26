@@ -26,7 +26,7 @@ if (isset($_POST['sub'])) {
             if (password_verify($password, $hashed_password)) {
                 // Password is valid, set session variables
                 $_SESSION['email'] = $email;
-                header("Location: index.html");
+                header("Location: index.php");
                 exit();
             } else {
                 echo "<script>alert('Invalid password');</script>";
