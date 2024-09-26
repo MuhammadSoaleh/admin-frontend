@@ -113,7 +113,7 @@ if (isset($_POST['sub'])) {
                         </div>
                         <button type="submit" name="sub" class="btn btn-primary py-3 w-100 mb-4">Sign In</button></form>
                         <p class="text-center mb-0">Don't have an Account? <a href="./signup.php">Sign Up</a></p>
-                        <p class="text-center mb-0">if Admin? <a href="/signup.php">Sign Up</a></p>
+                        <p class="text-center mb-0">if Admin? <a href="./adminsignin.php">Sign Up</a></p>
                     </div>
                 </div>
             </div>
