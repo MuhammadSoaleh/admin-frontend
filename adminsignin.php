@@ -1,39 +1,42 @@
 <?php
 session_start();
+
 if (isset($_POST['sub'])) {
     include('conn.php');
     
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $name = $_POST['name'];
-
-    // Password hashing
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     
-    // Insert query with correct string concatenation
-    $sql = "INSERT INTO `register` (`r-name`, `r-email`, `r-pass`) VALUES ('$name', '$email', '$hashed_password')";
-    
-    $result = mysqli_query($conn, $sql);
-    if ($result && mysqli_affected_rows($conn) > 0) {
-        $_SESSION['email'] = $email;
-        $_SESSION['password'] = $password;
-        header("Location: signin.php");
-        exit();
-    } else {
-        echo "<script>alert('Error: Could not insert the record.')</script>";
-    }
-
-    // Email validation
+    // Validate email format before querying the database
     if (empty($email)) {
-        $errors[] = "Email is required";
+        echo "<script>alert('Email is required');</script>";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Invalid email format";
+        echo "<script>alert('Invalid email format');</script>";
+    } else {
+        // Prepare and execute SQL query to fetch user based on email
+        $sql = "SELECT * FROM `register` WHERE `r-email` = '$email'";
+        $result = mysqli_query($conn, $sql);
+
+        // Check if a user with the email exists
+        if (mysqli_num_rows($result) > 0) {
+            $user = mysqli_fetch_assoc($result);  // Fetch user data as an associative array
+            $hashed_password = $user['r-pass'];   // Get the stored hashed password
+            
+            // Verify the entered password with the stored hashed password
+            if (password_verify($password, $hashed_password)) {
+                // Password is valid, set session variables
+                $_SESSION['email'] = $email;
+                header("Location:datatable.html");
+                exit();
+            } else {
+                echo "<script>alert('Invalid password');</script>";
+            }
+        } else {
+            echo "<script>alert('No account found with this email');</script>";
+        }
     }
 }
 ?>
-
-
-
 
 
 
@@ -81,7 +84,7 @@ if (isset($_POST['sub'])) {
         <!-- Spinner End -->
 
 
-        <!-- Sign Up Start -->
+        <!-- Sign In Start -->
         <div class="container-fluid">
             <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
                 <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
@@ -90,13 +93,9 @@ if (isset($_POST['sub'])) {
                             <a href="index.php" class="">
                                 <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>DASHMIN</h3>
                             </a>
-                            <h3>Sign Up</h3>
+                            <h3>Sign In</h3>
                         </div>
-                        <form method="post">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" name="name" id="floatingText" placeholder="jhondoe">
-                            <label for="floatingText">Username</label>
-                        </div>
+                        <form action="" method="post">
                         <div class="form-floating mb-3">
                             <input type="email" class="form-control" name="email" id="floatingInput" placeholder="name@example.com">
                             <label for="floatingInput">Email address</label>
@@ -105,21 +104,21 @@ if (isset($_POST['sub'])) {
                             <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password">
                             <label for="floatingPassword">Password</label>
                         </div>
-                        <!-- <div class="d-flex align-items-center justify-content-between mb-4">
-                            <div class="form-check">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <!-- <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
                                 <label class="form-check-label" for="exampleCheck1">Check me out</label>
                             </div> -->
-                            <a href="">Forgot Password</a>
+                            <!-- <a href="">Forgot Password</a> -->
                         </div>
-                        <button type="submit" name="sub" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
-                        </form>
-                        <p class="text-center mb-0">Already have an Account? <a href="./signin.php">Sign In</a></p>
+                        <button type="submit" name="sub" class="btn btn-primary py-3 w-100 mb-4">Sign In</button></form>
+                        <p class="text-center mb-0">Don't have an Account? <a href="./signup.php">Sign Up</a></p>
+                        <p class="text-center mb-0">if Admin? <a href="/signup.php">Sign Up</a></p>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Sign Up End -->
+        <!-- Sign In End -->
     </div>
 
     <!-- JavaScript Libraries -->
